@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Defines contract for storage of user data
+ */
 public interface UserStorage {
     void initialise() throws IOException;
 
-    public User create(User user) throws IOException;
+    User create(User user) throws IOException;
 
-    public Optional<User> findByEmail(String email) throws IOException;
+    Optional<User> findByEmail(String email) throws IOException;
 
     List<User> findAll() throws IOException;
 }

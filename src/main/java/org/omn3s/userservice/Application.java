@@ -9,7 +9,7 @@ import org.omn3s.userservice.user.UserService;
 import org.omn3s.userservice.user.UserStorage;
 import org.omn3s.userservice.web.AccessManager;
 import org.omn3s.userservice.web.TokenSupport;
-import org.omn3s.userservice.web.UserAPI;
+import org.omn3s.userservice.web.UserController;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -47,8 +47,8 @@ public class Application implements Closeable {
 
         // Configure Web Access
         app = Javalin.create(/*config*/);
-        UserAPI userAPI = new UserAPI(userService);
-        TokenSupport tokenSupport = TokenSupport.random();
+        UserController userAPI = new UserController(userService);
+        TokenSupport tokenSupport = TokenSupport.withRandomSecret();
         accessManager = new AccessManager(userAPI, tokenSupport);
         accessManager.install(app);
         userAPI.install(app);

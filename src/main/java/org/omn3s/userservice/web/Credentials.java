@@ -3,6 +3,9 @@ package org.omn3s.userservice.web;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 
+/**
+ * Wrapper class containing email/ password pair
+ */
 public class Credentials {
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";

@@ -12,6 +12,9 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Class to implement Web Layer to control and implement access controls
+ */
 public class AccessManager {
 
     public static final String AUTHORIZATION = "Authorization";

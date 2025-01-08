@@ -6,6 +6,9 @@ import org.omn3s.userservice.utils.NativeKey;
 import java.time.Instant;
 import java.util.Objects;
 
+/**
+ * Class representing the data stored for a user.
+ */
 public record User(NativeKey uid, String email,
                    EncodedPassword password,
                    Instant registered, long updated) {

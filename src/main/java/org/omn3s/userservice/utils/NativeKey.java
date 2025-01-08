@@ -7,7 +7,7 @@ import java.util.UUID;
  * It is assumed that all primary representations can be converted to and from strings.
  *
  * This means if the underlying storage uses ObjectIds or longs or UUID as primary keys
- * that informatioin is localised to the appropriate areas.
+ * that informatioin is localised to the appropriate classes.
  *
  * @param representation
  */

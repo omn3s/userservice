@@ -15,6 +15,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of UserStorage with an SQL based backend
+ */
 public class UserSQLStorage implements UserStorage {
     public static final String USER_TABLE = "USERS";
     public static final String EMAIL = "email";
@@ -25,7 +28,6 @@ public class UserSQLStorage implements UserStorage {
 
     private final Jdbi database;
     private String[] initialisation = {
-            "DROP TABLE IF EXISTS USERS ",
             "CREATE TABLE IF NOT EXISTS USERS (uid CHAR(40) PRIMARY KEY, email VARCHAR(255) UNIQUE, hashpw VARCHAR(255) , registered bigint, updated bigint)"
     };
 

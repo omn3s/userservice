@@ -14,14 +14,17 @@ import java.util.LinkedHashMap;
 import java.util.Optional;
 
 @SuppressWarnings("rawtypes")
-public class UserAPI implements Authenticator {
+/**
+ * Web Layer aspect of User Functionality, e.g. register, signup, authenticate getprofile
+ */
+public class UserController implements Authenticator {
 
     private final UserService userService;
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-mm-dd")
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-mm-dd")
             .withZone(ZoneId.systemDefault());
 
 
-    public UserAPI(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -30,7 +33,7 @@ public class UserAPI implements Authenticator {
         app.get(APIPaths.USER_PROFILE, this::getProfile, Role.AUTHENTICATED);
     }
 
-    private void register(@NotNull Context context) throws Exception {
+    public void register(@NotNull Context context) throws Exception {
         Credentials credentials = Credentials.extractCredentials(context);
         try {
             userService.register(credentials.getEmail(), credentials.getPassword());
@@ -42,7 +45,7 @@ public class UserAPI implements Authenticator {
         context.status(HttpStatus.CREATED);
     }
 
-    private void getProfile(@NotNull Context context) throws Exception {
+    public void getProfile(@NotNull Context context) throws Exception {
         LinkedHashMap<String, Object> fields = new LinkedHashMap<>();
         String email = Authenticator.getEmail(context);
         Optional<User> maybe = userService.findByEmail(email);

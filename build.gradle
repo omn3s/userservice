@@ -45,6 +45,12 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 }
+compileJava {
+    options.compilerArgs += ['-parameters']
+}
+javadoc {
+    options.addBooleanOption('Xdoclint:-missing',true)
+}
 
 test {
     useJUnitPlatform()

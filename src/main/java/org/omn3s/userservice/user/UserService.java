@@ -9,6 +9,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Class controlling the business logic of user functionality
+ */
 public class UserService {
     public static final String EMAIL = "email";
     private final UserStorage storage;

@@ -12,6 +12,9 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Support class for the generation and validation of authentication tokens.
+ */
 public class TokenSupport {
 
 
@@ -63,7 +66,7 @@ public class TokenSupport {
         }
     }
 
-    public static TokenSupport random() {
+    public static TokenSupport withRandomSecret() {
         byte[] secret = new byte[256];
         new SecureRandom().nextBytes(secret);
         return new TokenSupport(Algorithm.HMAC512(secret));

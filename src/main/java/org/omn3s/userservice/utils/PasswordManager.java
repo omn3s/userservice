@@ -2,6 +2,10 @@ package org.omn3s.userservice.utils;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+/**
+ * This class implements behaviour regarding encoding/validation of password and implementing a
+ * basic password restriction policy.
+ */
 public class PasswordManager {
     private int minLength;
 
