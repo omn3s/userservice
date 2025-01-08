@@ -1,0 +1,79 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'jacoco'
+}
+
+group = 'org.omn3s'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    withJavadocJar()
+    withSourcesJar()
+}
+
+ext {
+    javalin_version = "6.4.0"
+    sf4j_version = "2.0.16"
+    h2_version='2.3.232'
+    junit_version="5.10.0"
+    jdbi_version="3.47.0"
+}
+
+dependencies {
+
+    implementation("io.javalin:javalin:$javalin_version")
+    implementation("org.slf4j:slf4j-simple:$sf4j_version")
+    implementation('org.mindrot:jbcrypt:0.4')
+    // Database
+    implementation "com.h2database:h2:$h2_version"
+    implementation platform("org.jdbi:jdbi3-bom:$jdbi_version")
+    implementation("org.jdbi:jdbi3-core")
+    implementation "com.auth0:java-jwt:4.4.0"
+
+    testImplementation("io.javalin:javalin-testtools:$javalin_version")
+
+    // Testing
+    testImplementation platform("org.junit:junit-bom:$junit_version")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+application {
+    mainClass = 'org.omn3s.userservice.Application'
+    applicationName = 'userservice'
+}
+
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+// Convenience task to make ./install/ the root of an install rather than build/install/simple-user
+tasks.register('install', Sync) {
+    from "build/install/userservice"
+    into "${rootDir}/install"
+    dependsOn(installDist)
+}
+// Ensure that clean removes the install directory
+clean.doFirst {
+    delete "${rootDir}/install"
+}
+
