@@ -28,4 +28,16 @@ jobs:
 
     - name: Build with Gradle Wrapper
       run: ./gradlew build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: distribution
+        path: build/distributions/userservice-1.0-SNAPSHOT.zip
+        retention-days: 7
 
+    - name: Run Code Coverage
+      run: ./gradlew jacocoTestReport
+    - uses: actions/upload-artifact@v4
+      with:
+        name: coverage-results
+        path: build/reports/jacoco/test/html
+        retention-days: 7
