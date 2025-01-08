@@ -17,7 +17,10 @@ import java.io.IOException;
 public class Application implements Closeable {
 
     public static void main(String[] args) throws Exception {
-        new Application().start();
+        Application application = new Application();
+        Runtime.getRuntime().addShutdownHook(new Thread(application::close));
+        application.start();
+
     }
 
 
@@ -77,6 +80,7 @@ public class Application implements Closeable {
 
     public void start() throws Exception {
         app.start(getPort());
+
     }
 
     @Override

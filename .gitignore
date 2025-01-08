@@ -1,5 +1,6 @@
 .gradle
 build/
+install/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/application/**/build/
 !**/src/test/**/build/
@@ -16,28 +17,3 @@ build/
 out/
 !**/src/application/**/out/
 !**/src/test/**/out/
-
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/application/**/bin/
-!**/src/test/**/bin/
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
-.vscode/
-
-### Mac OS ###
-.DS_Store

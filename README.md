@@ -25,7 +25,7 @@ e.g.
 Download from either Oracle (https://docs.oracle.com/en/java/javase/) or OpenJDK builds from Adoptium.net (https://adoptium.net/temurin/releases/)
 
 
-##### Define JAVA_HOME environment variable
+##### Define `JAVA_HOME` environment variable
 
 Note that this step may be optional if java is on the system path and `java -version` displays a compatible version.
 
@@ -39,9 +39,7 @@ Or on a Linux distribution
 
 
 ### Build System : Gradle
-The Build system is using [gradle](https://gradle.org/) for everything, which at present is sufficient.
-
-**There is no requirement to install gradle to use this build.**
+The Build system is using [gradle](https://gradle.org/). **There is no requirement to install gradle to use this build.**
 
 The first time `gradlew` runs it will set up the appropriate environment, downloading appropriate gradlew version etc.
 
@@ -60,5 +58,15 @@ The first time `gradlew` runs it will set up the appropriate environment, downlo
 * `./gradlew install` Build and make an installation - located in the `<repo-root>/install/` use `./install/bin/userservice` to run
 * `./gradlew jacocoTestReport` Run tests with jacoco test coverage and report (`./build/reports/jacoco/test/html/index.html`)
 * `./gradlew test` Run tests without coverage
+
+## Example Run
+
+    ./gradlew clean install
+    ./install/bin/userservice 
+
+And in another terminal
+
+
+
 
 
