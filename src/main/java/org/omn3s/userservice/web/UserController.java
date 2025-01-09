@@ -8,9 +8,6 @@ import org.omn3s.userservice.user.UserService;
 import org.omn3s.userservice.utils.DuplicateEntityException;
 import org.omn3s.userservice.utils.StorageException;
 
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
 import java.util.Optional;
 
 /**
@@ -19,8 +16,7 @@ import java.util.Optional;
 public class UserController implements Authenticator {
 
     private final UserService userService;
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-mm-dd")
-            .withZone(ZoneId.systemDefault());
+    private final ProfileFormatter profileFormatter = new ProfileFormatter();
 
 
     public UserController(UserService userService) {
@@ -44,18 +40,14 @@ public class UserController implements Authenticator {
         context.status(HttpStatus.CREATED);
     }
 
-    public void getProfile(@NotNull Context context)  {
-        LinkedHashMap<String, Object> fields = new LinkedHashMap<>();
+    public void getProfile(@NotNull Context context) {
         String email = Authenticator.getEmail(context);
         Optional<User> maybe = userService.findByEmail(email);
-        if (maybe.isEmpty())
+        if (maybe.isEmpty()) {
             throw new NotFoundResponse();
+        }
         User user = maybe.get();
-        // Only include relevant information in response.
-        fields.put(Credentials.EMAIL_FIELD, user.email());
-        String datetimeString = dateFormatter.format(user.registered());
-        fields.put("registered", datetimeString);
-        context.json(fields);
+        context.json(profileFormatter.format(user));
     }
 
 
