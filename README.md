@@ -74,11 +74,12 @@ This bash script will register, login and retrieve the user profile using `curl`
 
 ## Artifacts from Github actions
 
-There are 2 artifacts created by the github action.
+There are 2 artifacts created by the [Github Action](https://github.com/omn3s/userservice/actions)
 
 `coverage-report` which is a zip containing the coverage report from the last commit.
 
-`distribution` which contains the userservice-1.0-SNAPSHOT built by the build command.
+`distribution` which contains the userservice-1.0-SNAPSHOT built by the build command. Note that any shell scripts
+i.e. contents of `./bin/` in the nested zip will not have the executable bit set.
 
 ## Design Choices and approaches
 
