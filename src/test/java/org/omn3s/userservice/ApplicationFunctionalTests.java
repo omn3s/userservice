@@ -32,7 +32,7 @@ public class ApplicationFunctionalTests {
 
 
     @Test
-    void testRegisterUser() throws Exception {
+    void testRegisterUser() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
@@ -42,7 +42,7 @@ public class ApplicationFunctionalTests {
     }
 
     @Test
-    void testRegisterUserNotValidEmail() throws Exception {
+    void testRegisterUserNotValidEmail() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 Response signup = signup(application, client, "example.com", PASSWORD);
@@ -51,7 +51,7 @@ public class ApplicationFunctionalTests {
         }
     }
     @Test
-    void testRegisterUserNotValidPassword() throws Exception {
+    void testRegisterUserNotValidPassword() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 Response signup = signup(application, client, EMAIL, "foo");
@@ -61,7 +61,7 @@ public class ApplicationFunctionalTests {
     }
 
     @Test
-    void testRegisterUserTwice() throws Exception {
+    void testRegisterUserTwice() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
@@ -73,7 +73,7 @@ public class ApplicationFunctionalTests {
     }
 
     @Test
-    void testLoginOK() throws Exception {
+    void testLoginOK() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
@@ -86,7 +86,7 @@ public class ApplicationFunctionalTests {
     }
 
     @Test
-    void testLoginBadPassword() throws Exception {
+    void testLoginBadPassword() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, "PASSWORD");
@@ -97,75 +97,75 @@ public class ApplicationFunctionalTests {
     }
 
     @Test
-    void testFormLoginPassword() throws Exception {
+    void testFormLoginPassword() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
                 String formBody = "email=%s&password=%s".formatted(EMAIL, PASSWORD);
                 MediaType contentType = MediaType.get("application/x-www-form-urlencoded");
-                Response response = client.request(APIPaths.LOGIN, (req) -> {
-                    req.post(RequestBody.create(formBody, contentType));
-                });
+                Response response = client.request(APIPaths.LOGIN,
+                        (req) -> req.post(RequestBody.create(formBody, contentType))
+                );
                 Assertions.assertEquals(HttpURLConnection.HTTP_OK, response.code());
             });
         }
     }
 
     @Test
-    void testLoginNoEmailInForm() throws Exception {
+    void testLoginNoEmailInForm() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
                 String formBody = "email2=%s&password=%s".formatted(EMAIL, PASSWORD);
                 MediaType contentType = MediaType.get("application/x-www-form-urlencoded");
-                Response response = client.request(APIPaths.LOGIN, (req) -> {
-                    req.post(RequestBody.create(formBody, contentType));
-                });
+                Response response = client.request(APIPaths.LOGIN,
+                        (req) -> req.post(RequestBody.create(formBody, contentType))
+                );
                 Assertions.assertEquals(HttpURLConnection.HTTP_BAD_REQUEST, response.code());
             });
         }
     }
 
     @Test
-    void testLoginNoForm() throws Exception {
+    void testLoginNoForm() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
                 String formBody = "email2=%s&password=%s".formatted(EMAIL, PASSWORD);
                 MediaType contentType = MediaType.get("application/x-www-form-urlencoded");
-                Response response = client.request(APIPaths.LOGIN, (req) -> {
-                    req.post(RequestBody.create(formBody, null));
-                });
+                Response response = client.request(APIPaths.LOGIN,
+                        (req) -> req.post(RequestBody.create(formBody, null))
+                );
                 Assertions.assertEquals(HttpURLConnection.HTTP_BAD_REQUEST, response.code());
             });
         }
     }
     @Test
-    void testLoginFormNoEmailInForm() throws Exception {
+    void testLoginFormNoEmailInForm() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
                 String formBody = "email2=%s&password=%s".formatted(EMAIL, PASSWORD);
                 MediaType contentType = MediaType.get("application/x-www-form-urlencoded");
-                Response response = client.request(APIPaths.LOGIN, (req) -> {
-                    req.post(RequestBody.create(formBody, contentType));
-                });
+                Response response = client.request(APIPaths.LOGIN,
+                        (req) -> req.post(RequestBody.create(formBody, contentType))
+                );
                 Assertions.assertEquals(HttpURLConnection.HTTP_BAD_REQUEST, response.code());
             });
         }
     }
 
     @Test
-    void testLoginNoEmailJson() throws Exception {
+    void testLoginNoEmailJson() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
                 Map<String, Object> json = new LinkedHashMap<>();
-                json.put(Credentials.EMAIL, EMAIL);
-                json.put(Credentials.PASSWORD, PASSWORD);
+                json.put(Credentials.EMAIL_FIELD, EMAIL);
+                json.put(Credentials.PASSWORD_FIELD, PASSWORD);
                 Assertions.assertEquals(HttpURLConnection.HTTP_OK,
                         client.post(APIPaths.LOGIN, json).code());
-                json.remove(Credentials.EMAIL);
+                json.remove(Credentials.EMAIL_FIELD);
                 Assertions.assertEquals(HttpURLConnection.HTTP_BAD_REQUEST,
                         client.post(APIPaths.LOGIN, json).code());
 
@@ -175,7 +175,7 @@ public class ApplicationFunctionalTests {
 
 
     @Test
-    void testLoginNoUser() throws Exception {
+    void testLoginNoUser() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 String token = loginAndGetToken(application, client);
@@ -185,7 +185,7 @@ public class ApplicationFunctionalTests {
     }
 
     @Test
-    void testFullWalkthrough() throws Exception {
+    void testFullWalkthrough() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
@@ -198,7 +198,7 @@ public class ApplicationFunctionalTests {
     }
 
     @Test
-    void testFullWalkthroughBadToken() throws Exception {
+    void testFullWalkthroughBadToken() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
@@ -210,7 +210,7 @@ public class ApplicationFunctionalTests {
 
 
     @Test
-    void testFullWalkthroughExpiredToken() throws Exception {
+    void testFullWalkthroughExpiredToken() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
@@ -224,7 +224,7 @@ public class ApplicationFunctionalTests {
     }
 
     @Test
-    void testValidTokenByNoUser() throws Exception {
+    void testValidTokenByNoUser() {
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
@@ -272,7 +272,7 @@ public class ApplicationFunctionalTests {
     }
 
 
-    private static void assertSingleUser(Application application) throws Exception {
+    private static void assertSingleUser(Application application) {
         List<User> users = application.getUserService().findAll();
         Assertions.assertEquals(1, users.size());
         Assertions.assertEquals(EMAIL, users.get(0).email());

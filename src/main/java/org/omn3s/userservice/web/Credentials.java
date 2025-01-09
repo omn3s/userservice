@@ -7,8 +7,8 @@ import io.javalin.http.Context;
  * Wrapper class containing email/ password pair
  */
 public class Credentials {
-    public static final String EMAIL = "email";
-    public static final String PASSWORD = "password";
+    public static final String EMAIL_FIELD = "email";
+    public static final String PASSWORD_FIELD = "password";
     private String email;
     private String password;
 
@@ -29,8 +29,8 @@ public class Credentials {
             credentials = context.bodyAsClass(Credentials.class);
         } else if (form) {
             credentials = new Credentials(
-                    context.formParam(EMAIL),
-                    context.formParam(PASSWORD)
+                    context.formParam(EMAIL_FIELD),
+                    context.formParam(PASSWORD_FIELD)
             );
         } else {
             throw new BadRequestResponse("No parameters found");

@@ -16,7 +16,7 @@ import java.io.Closeable;
 
 public class Application implements Closeable {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Application application = new Application();
         Runtime.getRuntime().addShutdownHook(new Thread(application::close));
         application.start();
@@ -35,7 +35,7 @@ public class Application implements Closeable {
      */
     private Handle memoryDBReference;
 
-    public Application() throws Exception {
+    public Application() throws StorageException {
         this(7070, "jdbc:h2:mem:users");
     }
 
@@ -78,7 +78,7 @@ public class Application implements Closeable {
     }
 
 
-    public void start() throws Exception {
+    public void start() {
         app.start(getPort());
 
     }

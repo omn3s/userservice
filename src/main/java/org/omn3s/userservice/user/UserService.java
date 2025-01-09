@@ -13,7 +13,6 @@ import java.util.Optional;
  * Class controlling the business logic of user functionality
  */
 public class UserService {
-    public static final String EMAIL = "email";
     private final UserStorage storage;
     private final PasswordManager passwordManager;
     private final EmailValidator emailValidator = new EmailValidator();

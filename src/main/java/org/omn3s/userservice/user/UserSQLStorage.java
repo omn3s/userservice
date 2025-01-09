@@ -29,9 +29,9 @@ public class UserSQLStorage implements UserStorage {
             "CREATE TABLE IF NOT EXISTS USERS (uid CHAR(40) PRIMARY KEY, email VARCHAR(255) UNIQUE, hashpw VARCHAR(255) , registered bigint)"
     };
 
-    private String select = "SELECT uid , email, hashpw , registered from USERS";
+    private final String select = "SELECT uid , email, hashpw , registered from USERS";
 
-    private String create =
+    private final String create =
             " insert into USERS(uid , email, hashpw , registered) VALUES(?,?,?,?)";
 
     public UserSQLStorage(Jdbi database) {
