@@ -5,7 +5,6 @@ import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.UnauthorizedResponse;
-import io.javalin.http.util.NaiveRateLimit;
 import io.javalin.security.RouteRole;
 
 import java.time.Instant;
@@ -23,6 +22,7 @@ public class AccessManager {
 
     private final Authenticator authenticator;
     private final TokenSupport tokenSupport;
+    private final RateLimiter limiter = new RateLimiter(5);
 
     public AccessManager(Authenticator authenticator, TokenSupport tokenSupport) {
         this.authenticator = authenticator;
@@ -55,7 +55,7 @@ public class AccessManager {
     private TokenSupport.DecodeResult getDecodeToken(Context ctx) {
         // First Check authorisation?
         String authorization = ctx.header(AUTHORIZATION);
-        String token = null;
+        String token;
         if (authorization != null && authorization.startsWith(SCHEME)) {
             token = authorization.substring(SCHEME.length()).trim();
             return tokenSupport.decode(token);
@@ -64,8 +64,8 @@ public class AccessManager {
     }
 
 
-    public void login(Context ctx) throws Exception {
-        NaiveRateLimit.requestPerTimeUnit(ctx, 10, TimeUnit.MINUTES); // throws if rate limit is exceeded
+    public void login(Context ctx) {
+        limiter.limit(ctx);
         Credentials credentials = Credentials.extractCredentials(ctx);
         String email = credentials.getEmail();
         String password = credentials.getPassword();

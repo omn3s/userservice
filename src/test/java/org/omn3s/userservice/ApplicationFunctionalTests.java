@@ -50,6 +50,7 @@ public class ApplicationFunctionalTests {
             });
         }
     }
+
     @Test
     void testRegisterUserNotValidPassword() {
         try (Application application = new Application()) {
@@ -140,6 +141,7 @@ public class ApplicationFunctionalTests {
             });
         }
     }
+
     @Test
     void testLoginFormNoEmailInForm() {
         try (Application application = new Application()) {
@@ -239,6 +241,33 @@ public class ApplicationFunctionalTests {
                 Assertions.assertEquals(HttpURLConnection.HTTP_OK,
                         getProfile(application, client, positiveControl).code());
             });
+        }
+    }
+
+
+    @Test
+    void testLoginLimit() {
+        try (Application application = new Application()) {
+            JavalinTest.test(application.getApp(), (server, client) -> {
+                signup(application, client, PASSWORD);
+                String token = loginAndGetToken(application, client);
+                Assertions.assertNotNull(token);
+                int tries = 0;
+                while (tries < 20) {
+                    tries++;
+                    Response loginResponse = client.post(APIPaths.LOGIN, new Credentials(EMAIL, PASSWORD));
+                    int status = loginResponse.code();
+                    if (status == 429) {
+                        break;
+                    } else {
+                        Assertions.assertEquals(HttpURLConnection.HTTP_OK, status);
+                    }
+                }
+                // Due to timing issues 4 requests could occur in minute X and 5 could occur in minute X+1
+                // So maximum sequence is 9 requests.
+                Assertions.assertTrue(tries >= 5 && tries < 10);
+            });
+
         }
     }
 
