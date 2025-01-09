@@ -104,7 +104,7 @@ public class UserSQLStorage implements UserStorage {
             long created = rs.getLong(CREATED);
 
             return new User(new NativeKey(uid), email, new EncodedPassword(encoded),
-                    Instant.ofEpochSecond(created));
+                    Instant.ofEpochMilli(created));
         }
     }
 }

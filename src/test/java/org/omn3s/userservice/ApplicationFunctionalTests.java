@@ -5,13 +5,13 @@ import io.javalin.testtools.JavalinTest;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.omn3s.userservice.user.User;
-import org.omn3s.userservice.web.APIPaths;
-import org.omn3s.userservice.web.AccessManager;
-import org.omn3s.userservice.web.Credentials;
-import org.omn3s.userservice.web.Role;
+import org.omn3s.userservice.utils.EncodedPassword;
+import org.omn3s.userservice.utils.NativeKey;
+import org.omn3s.userservice.web.*;
 
 import java.net.HttpURLConnection;
 import java.time.Instant;
@@ -188,6 +188,8 @@ public class ApplicationFunctionalTests {
 
     @Test
     void testFullWalkthrough() {
+        String expected = createProfileBody();
+
         try (Application application = new Application()) {
             JavalinTest.test(application.getApp(), (server, client) -> {
                 signup(application, client, PASSWORD);
@@ -195,8 +197,19 @@ public class ApplicationFunctionalTests {
                 Assertions.assertNotNull(token);
                 Response profile = getProfile(application, client, token);
                 Assertions.assertEquals(HttpURLConnection.HTTP_OK, profile.code());
+                String body = profile.body().string();
+                Assertions.assertEquals(expected, body);
             });
         }
+    }
+
+    @NotNull
+    private static String createProfileBody() {
+        ProfileFormatter formater = new ProfileFormatter();
+        User user = new User(NativeKey.newId(), EMAIL, new EncodedPassword(PASSWORD), Instant.now());
+        Map<String, Object> profileMap = formater.format(user);
+        return "{\"email\":\"%s\",\"registered\":\"%s\"}"
+                .formatted(EMAIL, profileMap.get(ProfileFormatter.REGISTERED));
     }
 
     @Test
