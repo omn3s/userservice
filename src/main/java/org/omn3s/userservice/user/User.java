@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 public record User(NativeKey uid, String email,
                    EncodedPassword password,
-                   Instant registered, long updated) {
+                   Instant registered) {
     public User {
         // Validations
         Objects.requireNonNull(email);

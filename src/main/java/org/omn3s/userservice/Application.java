@@ -3,16 +3,16 @@ package org.omn3s.userservice;
 import io.javalin.Javalin;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
-import org.omn3s.userservice.utils.PasswordManager;
 import org.omn3s.userservice.user.UserSQLStorage;
 import org.omn3s.userservice.user.UserService;
 import org.omn3s.userservice.user.UserStorage;
+import org.omn3s.userservice.utils.PasswordManager;
+import org.omn3s.userservice.utils.StorageException;
 import org.omn3s.userservice.web.AccessManager;
 import org.omn3s.userservice.web.TokenSupport;
 import org.omn3s.userservice.web.UserController;
 
 import java.io.Closeable;
-import java.io.IOException;
 
 public class Application implements Closeable {
 
@@ -39,7 +39,7 @@ public class Application implements Closeable {
         this(7070, "jdbc:h2:mem:users");
     }
 
-    public Application(int port, String dburl) throws IOException {
+    public Application(int port, String dburl) throws StorageException {
         setPort(port);
         Jdbi jdbi = Jdbi.create(dburl);
         memoryDBReference = jdbi.open();

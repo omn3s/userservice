@@ -3,17 +3,16 @@ package org.omn3s.userservice.web;
 import io.javalin.Javalin;
 import io.javalin.http.*;
 import org.jetbrains.annotations.NotNull;
-import org.omn3s.userservice.utils.DuplicateEntityException;
 import org.omn3s.userservice.user.User;
 import org.omn3s.userservice.user.UserService;
+import org.omn3s.userservice.utils.DuplicateEntityException;
+import org.omn3s.userservice.utils.StorageException;
 
-import java.io.IOException;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
-@SuppressWarnings("rawtypes")
 /**
  * Web Layer aspect of User Functionality, e.g. register, signup, authenticate getprofile
  */
@@ -33,7 +32,7 @@ public class UserController implements Authenticator {
         app.get(APIPaths.USER_PROFILE, this::getProfile, Role.AUTHENTICATED);
     }
 
-    public void register(@NotNull Context context) throws Exception {
+    public void register(@NotNull Context context) {
         Credentials credentials = Credentials.extractCredentials(context);
         try {
             userService.register(credentials.getEmail(), credentials.getPassword());
@@ -45,7 +44,7 @@ public class UserController implements Authenticator {
         context.status(HttpStatus.CREATED);
     }
 
-    public void getProfile(@NotNull Context context) throws Exception {
+    public void getProfile(@NotNull Context context)  {
         LinkedHashMap<String, Object> fields = new LinkedHashMap<>();
         String email = Authenticator.getEmail(context);
         Optional<User> maybe = userService.findByEmail(email);
@@ -53,7 +52,7 @@ public class UserController implements Authenticator {
             throw new NotFoundResponse();
         User user = maybe.get();
         // Only include relevant information in response.
-        fields.put("email", user.email());
+        fields.put(Credentials.EMAIL_FIELD, user.email());
         String datetimeString = dateFormatter.format(user.registered());
         fields.put("registered", datetimeString);
         context.json(fields);
@@ -61,7 +60,7 @@ public class UserController implements Authenticator {
 
 
     @Override
-    public boolean authenticate(String username, String password) throws IOException {
+    public boolean authenticate(String username, String password) throws StorageException {
         return userService.authenticate(username, password);
     }
 
