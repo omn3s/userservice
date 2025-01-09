@@ -63,14 +63,16 @@ The first time `gradlew` runs it will set up the appropriate environment, downlo
 
 ## Example Run
 
+In a bash terminal in the root of the repository
+
     ./gradlew clean install
     ./install/bin/userservice 
 
-And in another terminal
+And in another terminal in the root of the repository
 
     ./install/bin/walkthrough.sh
 
-This bash script will register, login and retrieve the user profile using `curl` as the client.
+The walkthough bash script will register, login and retrieve the user profile using `curl` as the client.
 
 ## Artifacts from Github actions
 
